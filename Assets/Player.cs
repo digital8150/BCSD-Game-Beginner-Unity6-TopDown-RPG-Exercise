@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 
     public float Speed;
     Rigidbody2D rigid;
+    Animator anim;
     void Start()
     {
         
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -32,6 +34,22 @@ public class Player : MonoBehaviour
             isHorizontal = true;
         else if(vDown)
             isHorizontal = false;
+
+        //Anim
+        if (anim.GetInteger("hAxisRaw") != (int)h)
+        {
+            anim.SetBool("isChanged", true);
+            anim.SetInteger("hAxisRaw", (int)h);
+        }
+        else if (anim.GetInteger("vAxisRaw") != (int)v)
+        {
+            anim.SetBool("isChanged", true);
+            anim.SetInteger("vAxisRaw", (int)v);
+        }
+        else
+        {
+            anim.SetBool("isChanged", false);
+        }
     }
 
     // FixedUpdate is called once per physics frame
