@@ -1,0 +1,53 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TalkManager : MonoBehaviour
+{
+    Dictionary<int, string[]> talkData;
+    Dictionary<int, Sprite> portraitData;
+
+    public Sprite[] portraitArr;
+    void Awake()
+    {
+        talkData = new Dictionary<int, string[]>();
+        portraitData = new Dictionary<int, Sprite>();
+        GenerateData();
+    }
+
+    void GenerateData()
+    {
+        talkData.Add(1000, new string[] {"안녕?:0", "너도 뺑이 치러 왔구나?:1"});
+        talkData.Add(2000, new string[] { "우리 집 오지마:3", "선풍기가 하나 뿐이야:3" });
+        talkData.Add(100, new string[] { "개딴딴해보이는 나무 상자다..." });
+
+        
+        portraitData.Add(1000 + 0, portraitArr[0]);
+        portraitData.Add(1000 + 1, portraitArr[1]);
+        portraitData.Add(1000 + 2, portraitArr[2]);
+        portraitData.Add(1000 + 3, portraitArr[3]);
+        portraitData.Add(2000 + 0, portraitArr[4]);
+        portraitData.Add(2000 + 1, portraitArr[5]);
+        portraitData.Add(2000 + 2, portraitArr[6]);
+        portraitData.Add(2000 + 3, portraitArr[7]);
+
+
+    }
+
+    public string GetTalk(int id, int talkIndex)
+    {
+        if(talkIndex == talkData[id].Length)
+        {
+            return null;
+        }
+        else
+        {
+            return talkData.ContainsKey(id) ? talkData[id][talkIndex] : null;
+        }
+
+    }
+
+    public Sprite GetPortrait(int id, int portraitIndex)
+    {
+        return portraitData[id + portraitIndex];
+    }
+}
