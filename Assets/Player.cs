@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -6,10 +7,12 @@ public class Player : MonoBehaviour
     float h;
     float v;
     bool isHorizontal;
+    Vector3 dirVec;
 
     public float Speed;
     Rigidbody2D rigid;
     Animator anim;
+    GameObject scannedObject;
     void Start()
     {
         
@@ -50,6 +53,22 @@ public class Player : MonoBehaviour
         {
             anim.SetBool("isChanged", false);
         }
+
+        //Direction
+        if (vDown && v == 1)
+            dirVec = Vector3.up;
+        else if(vDown && v == -1)
+            dirVec = Vector3.down;
+        else if (hDown && h == 1)
+            dirVec = Vector3.right;
+        else if (hDown && h == -1)
+            dirVec = Vector3.left;
+
+        //Scan
+        if (Input.GetButtonDown("Jump") && scannedObject != null)
+        {
+            Debug.Log($"½ºÄµ! : {scannedObject.name}");
+        }
     }
 
     // FixedUpdate is called once per physics frame
@@ -57,5 +76,18 @@ public class Player : MonoBehaviour
     {
         Vector2 moveVect = isHorizontal ? new Vector2(h, 0) : new Vector2(0,v);
         rigid.linearVelocity = moveVect * Speed;
+
+        //Ray
+        Debug.DrawRay(rigid.position, dirVec * 0.7f, new Color(0,1,0));
+        RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, dirVec, 0.7f, LayerMask.GetMask("Object"));
+
+        if(rayHit.collider != null)
+        {
+            scannedObject = rayHit.collider.gameObject;
+        }
+        else
+        {
+            scannedObject = null;
+        }
     }
 }
